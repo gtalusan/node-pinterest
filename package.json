@@ -1,6 +1,6 @@
 {
   "name": "node-pinterest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "lib.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "George Talusan <george.talusan@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^2.10.1",
     "request-promise": "^0.4.3"
   }
 }

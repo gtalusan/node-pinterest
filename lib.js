@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var rp = require('request-promise');
 
 function Pinterest(apiToken) {
@@ -32,7 +33,14 @@ Pinterest.prototype.__generic = function(path) {
 };
 
 Pinterest.prototype.api = function(path) {
-	return this.__route(path);
+	return this.__route(path).then(function(body) {
+		try {
+			return Promise.resolve(JSON.parse(body));
+		}
+		catch (e) {
+			return Promise.reject(e);
+		}
+	});
 };
 
 exports.init = function(apiToken) {
