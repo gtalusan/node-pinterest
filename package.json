@@ -1,6 +1,6 @@
 {
   "name": "node-pinterest",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "lib.js",
   "scripts": {

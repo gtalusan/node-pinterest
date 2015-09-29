@@ -5,35 +5,30 @@ function Pinterest(apiToken) {
 	this.apiToken = apiToken;
 }
 
-Pinterest.prototype.__route = function(path) {
-	var routes = {
-		'me': Pinterest.prototype.__generic,
-		'me/pins': Pinterest.prototype.__generic,
-		'me/boards': Pinterest.prototype.__generic,
-		'me/likes': Pinterest.prototype.__generic,
-		'me/followers': Pinterest.prototype.__generic,
-		'me/following/boards': Pinterest.prototype.__generic,
-		'me/following/users': Pinterest.prototype.__generic,
-		'me/following/interests': Pinterest.prototype.__generic,
-	};
-	return routes[path].bind(this)(path);
+Pinterest.prototype.__route = function(path, options) {
+	var routes = { };
+	var route = routes[path] || Pinterest.prototype.__generic;
+	return route.bind(this)(path, options);
 };
 
-Pinterest.prototype.__buildInfo = function(path) {
+Pinterest.prototype.__buildInfo = function(path, options) {
 	return {
-		url: 'https://api.pinterest.com/v1/' + path,
+		method: options && options.method || "GET",
+		url: path.indexOf('https') === 0 ? path : 'https://api.pinterest.com/v1/' + path + '/',
+		qs: options && options.qs || {},
+		form: options && options.body || {},
 		headers: {
 			'Authorization': 'Bearer ' + this.apiToken
 		}
 	};
 };
 
-Pinterest.prototype.__generic = function(path) {
-	return rp(this.__buildInfo(path));
+Pinterest.prototype.__generic = function(path, options) {
+	return rp(this.__buildInfo(path, options));
 };
 
-Pinterest.prototype.api = function(path) {
-	return this.__route(path).then(function(body) {
+Pinterest.prototype.api = function(path, options) {
+	return this.__route(path, options).then(function(body) {
 		try {
 			return Promise.resolve(JSON.parse(body));
 		}
