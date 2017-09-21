@@ -13,6 +13,7 @@ Pinterest.prototype.__route = function(path, options) {
 
 Pinterest.prototype.__buildInfo = function(path, options) {
 	return {
+		resolveWithFullResponse: true,			
 		method: options && options.method || "GET",
 		url: path.indexOf('https') === 0 ? path : 'https://api.pinterest.com/v1/' + path + '/',
 		qs: options && options.qs || {},
@@ -28,9 +29,9 @@ Pinterest.prototype.__generic = function(path, options) {
 };
 
 Pinterest.prototype.api = function(path, options) {
-	return this.__route(path, options).then(function(body) {
+	return this.__route(path, options).then(function(response) {
 		try {
-			return Promise.resolve(JSON.parse(body));
+			return Promise.resolve(JSON.parse(response.body),response.headers);
 		}
 		catch (e) {
 			return Promise.reject(e);
